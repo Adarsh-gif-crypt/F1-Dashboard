@@ -7,12 +7,13 @@ st.set_page_config(layout='wide')
 
 dfcont = pd.read_csv('D:\DS\Streamlit\Formula 1\Circuit Data\CircuitcontdataUpdated.csv')
 dfloc = pd.read_csv('D:\DS\Streamlit\Formula 1\Circuit Data\circuitlocation.csv')
+dfconst = pd.read_csv('D:\DS\Streamlit\Formula 1\Constructors\constructors.csv')
 
 #df operations
 dfcont.fillna('North America',inplace=True)
 dfcontdata = pd.DataFrame({'Continent':['Europe','Asia','North America','South America','Africa','Australia'],
 'Count':[14,14,3,2,1,1]})
-
+dfconstnational = pd.DataFrame(dfconst.nationality.value_counts())
 
 
 
@@ -67,3 +68,33 @@ if(category =='Circuits'):
     #    color = 'Count'
     #).project('equirectangular')
         #st.altair_chart(choroplethcont)
+
+# ADD FUNFACTS IN CIRCUITS
+
+if(category =='Constructors'):
+    row1s0,row1,row1s1 = st.columns((4.5,5,2))
+    row1.title('Constructors')
+    c1, c2, c3 = st.columns(3)
+    c1.markdown("""Constructors are people or corporate entities which
+     design key parts of Formula One cars that have competed or 
+     are intended to compete in the FIA World Championship. There are Ten Constructors
+     currently competing in the FIA Formula 1 World Championship as of this moment. Out
+     of which, four manufacture their own engines""")
+    c2.image('https://i.pinimg.com/originals/94/d4/d5/94d4d5b4ed53bcda37b6574024fb514a.jpg',caption = 'World Constructors Championship Trophy')
+    c3.markdown("""Each year, the F1 World Championship season is held, consisting of a series
+    of races, known as Grand Prixs. Constructors are awarded points based on the finishing position of each of their
+     two drivers at each Grand Prix, and the constructor who accumulates the most points over 
+     each championship is crowned that year's World Constructors' Champion. As of the 2021 Abu Dhabi Grand Prix, 
+     there have been 171 Formula One constructors who have raced at least one of the 1,057 FIA World 
+     Championship races since the first such event, the 1950 British Grand Prix.  """)
+    
+    #st.write(dfconstnational)
+    row1c1,row1c2 = st.columns(2)
+    fig = alt.Chart(dfconst).mark_arc().encode(
+        theta = 'count()', color = alt.Color(field = 'nationality',type = 'nominal'),
+        tooltip = ['count()','nationality']
+    )
+    row1c1.subheader('Constructors by Nationality')
+    row1c1.altair_chart(fig,use_container_width = True)
+    row1c1.markdown("""As you may notice, most of the constructors are from European Countries and America. 
+    This can be explained by the Formation of the FIA in Europe and America's industrial revolution in Automobile Manufacturing""")
